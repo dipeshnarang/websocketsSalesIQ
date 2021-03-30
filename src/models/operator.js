@@ -55,44 +55,47 @@ function getChatOperatorDetails(callback){
     })
 }
 
-getOperatorDetails(function(err,result){
-    if(err){
-       return console.log(err)
-    }
-    result.forEach((row)=>{
-        operators.push(new Operator(row.ID,row.OPT_ID,row.OPT_NAME,row.OPT_DEPT_ID,row.DEPT_NAME,row.OPT_EMAIL,row.STATUS,row.LAST_LOGIN,row.LAST_OFFLINE))
-    })
-})
 
-getChatOperatorDetails(function(err,data){
-    if(err){
-        return console.log(err)
-    }
-    data.forEach((row)=>{
-        console.log(row)
-        const op=operators.find((operator)=>{
-            return operator.id===row.OPTID
-        })
-        console.log(typeof(row.END_TIME))
-        if(row.END_TIME!=null){
-            op.chatsCompleted++
-            let time=[]
-            time.push(parseInt(row.ATTENDED_TIME))
-            time.push(parseInt(row.END_TIME))
-            op.chatsAttended.push(time)
-        }else{
-            op.ongoingChats++
+schedule.scheduleJob('*/20 * * * * *',async function(){
+    getOperatorDetails(function(err,result){
+        if(err){
+           return console.log(err)
         }
+        result.forEach((row)=>{
+            operators.push(new Operator(row.ID,row.OPT_ID,row.OPT_NAME,row.OPT_DEPT_ID,row.DEPT_NAME,row.OPT_EMAIL,row.STATUS,row.LAST_LOGIN,row.LAST_OFFLINE))
+        })
+
+        getChatOperatorDetails(function(err,data){
+            if(err){
+                return console.log(err)
+            }
+            data.forEach((row)=>{
+                console.log(row)
+                const op=operators.find((operator)=>{
+                    return operator.id===row.OPTID
+                })
+                console.log(typeof(row.END_TIME))
+                if(row.END_TIME!=null){
+                    op.chatsCompleted++
+                    let time=[]
+                    time.push(parseInt(row.ATTENDED_TIME))
+                    time.push(parseInt(row.END_TIME))
+                    op.chatsAttended.push(time)
+                }else{
+                    op.ongoingChats++
+                }
+                
+            })
         
+            operators.forEach((op)=>{
+                let timeframes=merge(op.chatsAttended)
+                console.log(timeframes)
+                op.totalActiveTime=convertToReadableTime(calculateActiveTime(timeframes))      
+            })
+        
+            console.log(operators)
+        })
     })
-
-    operators.forEach((op)=>{
-        let timeframes=merge(op.chatsAttended)
-        console.log(timeframes)
-        op.totalActiveTime=convertToReadableTime(calculateActiveTime(timeframes))      
-    })
-
-    console.log(operators)
 })
 
 function getOperators(){

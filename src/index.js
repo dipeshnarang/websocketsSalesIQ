@@ -19,7 +19,7 @@ io.on('connection',(socket)=>{
 
     socket.emit('message',operator.getOperators())
 
-    schedule.scheduleJob('*/10 * * * * *',function(){
+    schedule.scheduleJob('*/15 * * * * *',function(){
         socket.emit('message',operator.getOperators())
     })
 })
