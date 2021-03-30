@@ -1,4 +1,5 @@
 const db=require('./../databaseConnection/mariadb')
+const schedule=require('node-schedule')
 const {merge,calculateActiveTime,convertToReadableTime}=require('../helperFunction/helperFunction')
 
 class Operator{
@@ -75,9 +76,9 @@ getChatOperatorDetails(function(err,data){
         console.log(typeof(row.END_TIME))
         if(row.END_TIME!=null){
             op.chatsCompleted++
-            let time=[[]]
-            time[0].push(row.ATTENDED_TIME)
-            time[0].push(row.END_TIME)
+            let time=[]
+            time.push(parseInt(row.ATTENDED_TIME))
+            time.push(parseInt(row.END_TIME))
             op.chatsAttended.push(time)
         }else{
             op.ongoingChats++
@@ -86,9 +87,21 @@ getChatOperatorDetails(function(err,data){
     })
 
     operators.forEach((op)=>{
-        let activeTime=
+        let timeframes=merge(op.chatsAttended)
+        console.log(timeframes)
+        op.totalActiveTime=convertToReadableTime(calculateActiveTime(timeframes))      
     })
+
+    console.log(operators)
 })
+
+function getOperators(){
+    return operators
+}
+
+module.exports={
+    getOperators
+}
 
 
 

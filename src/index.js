@@ -1,6 +1,8 @@
+const operator=require('./models/operator')
 const http=require('http')
 const express=require('express')
 const socketio=require('socket.io')
+const schedule=require('node-schedule')
 const path=require('path')
 
 const app=express()
@@ -14,9 +16,12 @@ app.use(express.static(publicDirPath))
 app.use(express.json())
 
 io.on('connection',(socket)=>{
-    console.log('Hello')
 
-    socket.emit('message',"Hello World!g")
+    socket.emit('message',operator.getOperators())
+
+    schedule.scheduleJob('*/10 * * * * *',function(){
+        socket.emit('message',operator.getOperators())
+    })
 })
 
 server.listen(port,()=>{
