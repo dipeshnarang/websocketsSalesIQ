@@ -23,7 +23,6 @@ class Operator{
 let operators=[]
 
 function getOperatorDetails(callback){
-    operators=[]
     db.connectionPool.getConnection().then((conn)=>{
         let sql="SELECT operator.ID, operator.OPT_ID,operator.OPT_NAME, operator.OPT_DEPT_ID ,department.DEPT_NAME, operator.OPT_EMAIL, operator.STATUS, operator.LAST_LOGIN, operator.LAST_OFFLINE from operator inner join department on operator.OPT_DEPT_ID=department.ID;"
         conn.query(sql).then((result)=>{
@@ -56,34 +55,70 @@ function getChatOperatorDetails(callback){
 }
 
 
-schedule.scheduleJob('*/20 * * * * *',async function(){
+schedule.scheduleJob('*/60 * * * * *',async function(){
     getOperatorDetails(function(err,result){
         if(err){
            return console.log(err)
         }
-        result.forEach((row)=>{
-            operators.push(new Operator(row.ID,row.OPT_ID,row.OPT_NAME,row.OPT_DEPT_ID,row.DEPT_NAME,row.OPT_EMAIL,row.STATUS,row.LAST_LOGIN,row.LAST_OFFLINE))
-        })
 
         getChatOperatorDetails(function(err,data){
             if(err){
                 return console.log(err)
             }
+
+            result.forEach((row)=>{
+            
+                let op=operators.find((op)=>{
+                    return op.id==row.ID && op.operatorId==row.OPT_ID
+                })
+                if(op==null){
+                    operators.push(new Operator(row.ID,row.OPT_ID,row.OPT_NAME,row.OPT_DEPT_ID,row.DEPT_NAME,row.OPT_EMAIL,row.STATUS,row.LAST_LOGIN,row.LAST_OFFLINE))
+                }else{
+                    if(op.name!=row.OPT_NAME){
+                        op.name=row.OPT_NAME
+                    }
+    
+                    if(op.departmentId!=row.OPT_DEPT_ID){
+                        op.departmentId=row.OPT_DEPT_ID
+                    }
+    
+                    if(op.departmentName!=row.DEPT_NAME){
+                        op.departmentName=row.DEPT_NAME
+                    }
+    
+                    if(op.email!=row.OPT_EMAIL){
+                        op.email=row.OPT_EMAIL
+                    }
+    
+                    op.status=row.STATUS
+                    op.lastLogin=row.LAST_LOGIN
+                    op.lastOffline=row.LAST_OFFLINE
+                    op.chatsCompleted=0
+                    op.ongoingChats=0
+                }
+            })
+
+
+
             data.forEach((row)=>{
                 console.log(row)
                 const op=operators.find((operator)=>{
                     return operator.id===row.OPTID
                 })
                 console.log(typeof(row.END_TIME))
-                if(row.END_TIME!=null){
-                    op.chatsCompleted++
-                    let time=[]
-                    time.push(parseInt(row.ATTENDED_TIME))
-                    time.push(parseInt(row.END_TIME))
-                    op.chatsAttended.push(time)
-                }else{
-                    op.ongoingChats++
+                if(op!=null){
+                    
+                    if(row.END_TIME!=null){
+                        op.chatsCompleted++
+                        let time=[]
+                        time.push(parseInt(row.ATTENDED_TIME))
+                        time.push(parseInt(row.END_TIME))
+                        op.chatsAttended.push(time)
+                    }else{
+                        op.ongoingChats++
+                    }
                 }
+                
                 
             })
         
@@ -98,14 +133,14 @@ schedule.scheduleJob('*/20 * * * * *',async function(){
     })
 })
 
-function getOperators(){
+function getAllOperators(){
     return operators
 }
 
-module.exports={
-    getOperators
+function getDeptOperators(){
+
 }
 
-
-
-
+module.exports={
+    getAllOperators
+}

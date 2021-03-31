@@ -1,4 +1,4 @@
-const operator=require('./models/operator')
+const {updatedData}=require('./models/sendData')
 const http=require('http')
 const express=require('express')
 const socketio=require('socket.io')
@@ -17,10 +17,10 @@ app.use(express.json())
 
 io.on('connection',(socket)=>{
 
-    socket.emit('message',operator.getOperators())
+    socket.emit('message',updatedData())
 
-    schedule.scheduleJob('*/20 * * * * *',function(){
-        socket.emit('message',operator.getOperators())
+    schedule.scheduleJob('*/30 * * * * *',function(){
+        socket.emit('message',updatedData())
     })
 })
 
