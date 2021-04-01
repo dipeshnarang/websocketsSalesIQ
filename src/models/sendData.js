@@ -5,6 +5,9 @@ function updatedData(){
     let operators=getAllOperators()
     let deparments=getDepartments()
 
+    deparments.forEach((dep)=>{
+        dep.associatedOperators=[]
+    })
     operators.forEach((op)=>{
         
         let dep=deparments.find((dep)=>{
