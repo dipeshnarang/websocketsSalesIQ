@@ -37,7 +37,8 @@ function fetchDepartments(callback){
     })
 }
 
-schedule.scheduleJob('*/60 * * * * *',function(){
+
+function fetchDepartmentsData(){
     fetchDepartments(function(err,data){
         if(err){
             console.log(e)
@@ -51,7 +52,13 @@ schedule.scheduleJob('*/60 * * * * *',function(){
             console.log(row)
         })
     })
+}
+
+schedule.scheduleJob('*/60 * * * * *',function(){
+    fetchDepartmentsData()
 })
+
+fetchDepartmentsData()
 
 function getDepartments(){
     return departments

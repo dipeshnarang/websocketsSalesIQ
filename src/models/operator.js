@@ -55,7 +55,8 @@ function getChatOperatorDetails(callback){
 }
 
 
-schedule.scheduleJob('*/60 * * * * *',async function(){
+
+function fetchData(){
     getOperatorDetails(function(err,result){
         if(err){
            return console.log(err)
@@ -95,6 +96,7 @@ schedule.scheduleJob('*/60 * * * * *',async function(){
                     op.lastOffline=row.LAST_OFFLINE
                     op.chatsCompleted=0
                     op.ongoingChats=0
+                    op.chatsAttended=[]
                 }
             })
 
@@ -131,7 +133,13 @@ schedule.scheduleJob('*/60 * * * * *',async function(){
             console.log(operators)
         })
     })
+}
+
+schedule.scheduleJob('*/60 * * * * *',function(){
+    fetchData()
 })
+
+fetchData()
 
 function getAllOperators(){
     return operators
