@@ -2,8 +2,9 @@ const db=require('./../databaseConnection/mariadb')
 const schedule=require('node-schedule')
 
 class Department{
-    constructor(Id,name,deptId,ongoingChats,completedChats){
+    constructor(Id,uniqueName,name,deptId,ongoingChats,completedChats){
         this.Id=Id,
+        this.uniqueName=uniqueName
         this.name=name,
         this.deptId=deptId,
         this.ongoingChats=ongoingChats,
@@ -43,8 +44,10 @@ schedule.scheduleJob('*/60 * * * * *',function(){
         }
         
         departments=[]
+        let i=0
         data.forEach((row)=>{
-            departments.push(new Department(row.ID,row.DEPT_NAME,row.DEPT_ID,row.TOTAL_CHAT-row.COMPLETED_CHAT,row.COMPLETED_CHAT))
+            departments.push(new Department(row.ID,"department"+i,row.DEPT_NAME,row.DEPT_ID,row.TOTAL_CHAT-row.COMPLETED_CHAT,row.COMPLETED_CHAT))
+            i++
             console.log(row)
         })
     })
