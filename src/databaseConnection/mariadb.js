@@ -2,8 +2,8 @@ const mariadb=require('mariadb')
 
 const connectionPool = mariadb.createPool({
     host: 'localhost',
-    user:'zohosales', 
-    password: 'zohosales',
+    user:'root', 
+    password: 'root',
     database:'salesiq'
 });
 
