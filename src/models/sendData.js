@@ -11,7 +11,7 @@ function updatedData(){
     operators.forEach((op)=>{
         
         let dep=deparments.find((dep)=>{
-            return dep.Id==op.departmentId
+            return dep.id==op.departmentId
         })
 
         if(dep){
@@ -19,8 +19,18 @@ function updatedData(){
         }
     })
     return deparments
+
+}
+
+function sendDeptData(deptName){
+    let deptData=deparments.find((dep)=>{
+        return dep.name==deptName
+    })
+
+    return deptData
 }
 
 module.exports={
-    updatedData
+    updatedData,
+    sendDeptData
 }

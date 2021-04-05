@@ -16,7 +16,8 @@ class Operator{
         this.ongoingChats=0,
         this.chatsCompleted=0,
         this.chatsAttended=[],
-        this.totalActiveTime=0
+        this.totalActiveTime=0,
+        this.chatsOwned=0
     }
 }
 
@@ -40,14 +41,14 @@ function getOperatorDetails(callback){
 }
 
 function getChatOperatorDetails(callback){
-    let sql="Select chat_opt_details.OPTID, chat_opt_details.ATTENDED_TIME, chat_opt_details.END_TIME from chat_opt_details;"
+    let sql="Select chat_opt_details.OPTID, chat_opt_details.ATTENDED_TIME, chat_opt_details.END_TIME, chat_opt_details.CHATS_OWNED from chat_opt_details;"
     db.connectionPool.getConnection().then((conn)=>{
         conn.query(sql).then((result)=>{
             conn.release()
             callback(null,result)
         }).catch((e)=>{
             conn.release()
-            callback(err,null)
+            callback(e,null)
         })
     }).catch((err)=>{
         callback(err,null)
@@ -97,6 +98,7 @@ function fetchData(){
                     op.chatsCompleted=0
                     op.ongoingChats=0
                     op.chatsAttended=[]
+                    op.chatsOwned=0
                 }
             })
 
@@ -119,6 +121,10 @@ function fetchData(){
                     }else{
                         op.ongoingChats++
                     }
+
+                    if(row.CHATS_OWNED){
+                        op.chatsOwned++
+                    }
                 }
                 
                 
@@ -130,7 +136,7 @@ function fetchData(){
                 op.totalActiveTime=convertToReadableTime(calculateActiveTime(timeframes))      
             })
         
-            console.log(operators)
+            // console.log(operators)
         })
     })
 }
