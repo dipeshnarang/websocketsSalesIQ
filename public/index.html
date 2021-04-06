@@ -302,24 +302,12 @@
       var chart = new google.visualization.PieChart(document.getElementById('piechart'));
     chart.draw(data, options);
    }
-    function drawCurveTypes() {
+    function drawCurveTypes(barGraph) {
      var data = new google.visualization.DataTable();
      data.addColumn('timeofday', 'Time of Day');
      data.addColumn('number', 'Total number of Chats');
 
-     data.addRows([
-        [[8, 30, 45], 5],
-        [[9, 0, 0], 10],
-        [[10, 0, 0, 0], 12],
-        [[10, 45, 0, 0], 13],
-        [[11, 0, 0, 0], 15],
-        [[12, 15, 45, 0], 20],
-        [[13, 0, 0, 0], 22],
-        [[14, 30, 0, 0], 25],
-        [[15, 12, 0, 0], 30],
-        [[16, 45, 0], 32],
-        [[16, 59, 0], 42]
-      ]);
+     data.addRows(barGraph);
      var options = {
         'width':700, 
         'height':291,
@@ -391,6 +379,7 @@ j=0;
 var totalChatsToday = "";
 var totalChatDurationToday = "";
 var ongoingChats = "";
+var barGraph=[]
 
 
 var agentAvailableTemp = 0;
@@ -407,6 +396,8 @@ for (item in data)
 		totalChatsToday = data[item].completedChats;
 		totalChatDurationToday = data[item].chatDuration;
 		ongoingChats = data[item].ongoingChats;
+    barGraph=data[item].barGraph
+    drawCurveTypes(barGraph)
 		for(subitem in data[item].associatedOperators)
 		{
 			row = row + 1;
