@@ -12,7 +12,8 @@ class Department{
         this.completedChats=0,
         this.associatedOperators=[],
         this.deptChats=[]
-        this.chatDuration=0
+        this.chatDuration=0,
+        this.barGraph=[]
     }
 }
 

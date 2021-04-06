@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link rel= "stylesheet" type= "text/css" href= "./static/css/bootstrap.min.css">
+    <link rel= "stylesheet" type= "text/css" href= "./static/css/default.css">
+    <link rel= "stylesheet" type= "text/css" href= "./static/css/sidebar-nav.min.css">
+    <link rel= "stylesheet" type= "text/css" href= "./static/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js"></script>
+
+<script>
+function changeFunc()
+{
+var x = document.getElementById("cars").value;
+// Store
+localStorage.setItem("lastSelection", x);
+console.log(x);
+
+location.reload();
+// Retrieve
+if(localStorage.getItem("lastSelection")!=null)
+{
+console.log(document.getElementById("cars").value = localStorage.getItem("lastSelection"));
+document.getElementById("cars").value = localStorage.getItem("lastSelection");
+}
+}
+</script>
+
+<style>
+
+    body {
+      margin: 0;
+      font-family: "Lato", sans-serif;
+      background-color: #fff;
+    }
+    /*https://miro.medium.com/max/1864/1*ZhuqSg8Jmz4p8H6X5U1uzQ.png*/
+    .sidebar {
+      margin:0;
+      padding: 0;
+      width: 50px;
+      background:url("https://www.solidbackgrounds.com/images/1920x1080/1920x1080-light-cyan-solid-color-background.jpg") repeat-y scroll left top transparent;
+      position: fixed;
+      height: 100%;
+      overflow: auto;
+    }
+    .sidebar a {
+      display: block;
+      color: black;
+      padding-left: 10px;
+      font-size: 18px;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    .sidebar a.active {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .sidebar a:hover:not(.active) {
+      background-color:black;
+      color: white;
+      z-index: 2;
+      overflow: visible;
+      transform: scale(1.1);
+      animation: bounce 1s;
+      opacity: 1.0
+    }
+    div.content {
+      margin-left: 200px;
+      padding: 1px 16px;
+      height: 1000px;
+    }
+    .hello{
+      border-collapse:separate;
+      border-spacing:0 22px;
+    }
+    .hello tr{
+      position: relative;
+      z-index: 1;
+      font-size: 14px;
+      cursor: pointer;
+      transition: .6s ease;
+      opacity: 0.99
+    }
+    .hello tr:hover {
+      z-index: 2;
+      overflow: visible;
+      background-color:#f2606f;
+      transform: scale(1.1);
+      animation: bounce 1s;
+      opacity: 1.0
+    }
+    .page-wrapper{
+      margin-left: 50px;
+    }
+    .hello tr td{
+      position: relative;
+      z-index: 1;
+      font-size: 17px;
+
+      color:#fff;
+      margin: 0;
+      text-align: center;
+    }
+    .hello tr{
+      background-color:#2a6592;
+    }
+    @media screen and (max-width: 700px) {
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+      }
+      .sidebar a {
+        float: left;
+      }
+      div.content {
+        margin-left: 0;
+      }
+    }
+    @media screen and (max-width: 400px) {
+      .sidebar a {
+        text-align: center;
+        float: none;
+      }
+    }
+    @media screen and (max-width: 700px) {
+      .page-wrapper {
+        margin-left: 0;
+      }
+
+
+    }
+
+    @media screen and (max-width: 400px) {
+      .page-wrapperr {
+        margin-left: 0;
+        float:none;
+      }
+
+
+    }
+  @keyframes bounce {
+      0%, 20%, 60%, 100% {
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+      }
+      40% {
+        -webkit-transform: translateY(-20px);
+        transform: translateY(-20px);
+      }
+      80% {
+        -webkit-transform: translateY(-10px);
+        transform: translateY(-10px);
+      }
+  }
+  td, th {
+      text-align: center;
+
+    }
+    .open-button {
+      background-color: rgb(20, 12, 12);
+      color: white;
+      padding: 10px 2px;
+      border: none;
+      cursor: pointer;
+      opacity: 0.8;
+      position: fixed;
+      bottom: 23px;
+      left: 4px;
+      width: 180px;
+      border-style: outset;
+      border-radius: 20px;
+    }
+
+    /* The popup chat - hidden by default */
+    .chat-popup {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      right: 15px;
+      border: 3px solid #bbb9b9;
+      border-style: ridge;
+      border-radius: 20px;
+      z-index: 9;
+    }
+
+    /* Add styles to the form container */
+    .form-container {
+      max-width: 300px;
+      height: 350px;
+      width: 250px;
+      padding: 10px;
+      background-color: rgb(235, 221, 221);
+      color: #0a0909;
+      border-style: ridge;
+      border-radius: 20px;
+      overflow:auto;
+      text-align: justify;
+    }
+
+    /* Add a red background color  */
+    .notavailabledot {
+      height: 12px;
+      width: 12px;
+      background-color: rgb(185, 6, 6);
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .availabledot {
+      height: 12px;
+      width: 12px;
+      background-color: rgb(20, 141, 5);
+      border-radius: 50%;
+      display: inline-block;
+    }
+    /* Add some hover effects to buttons */
+    .form-container .btn:hover, .open-button:hover {
+      opacity: 1;
+    }
+    .heading{
+        text-decoration: underline;
+        text-decoration-thickness: 5px;
+    }
+    #chart_div::-webkit-scrollbar {
+      display: none;
+  }
+
+
+//CSS for Dropdown Menu
+.dropbtn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  //position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {background-color: #ddd;}
+
+.dropdown:hover .dropdown-content {display: block;}
+
+.dropdown:hover .dropbtn {background-color: #3e8e41;}
+
+
+
+</style>
+</head>
+
+<body onload="drwaa('Hello')">
+        <div class="sidebar">
+          <br><br>
+            <i class="fa fa-hand-o-right" style="font-size:34px"></i>
+            <br><br>
+            <div class="heading"><center><h3>DEPARTMENTS</h3></center></div>
+            <br><br>
+            <ul id="listDepartment">
+               <!-- <li><a href="/#" class="waves-effect" ></i>Department1</a></li>
+                    <br>
+                <li><a href="/#" class="waves-effect"></i>Department2</a></li>
+                    <br>
+                <li><a href="/#" class="waves-effect"></i>Department3</a></li>
+                    <br>
+                <li><a href="/#" class="waves-effect"></i>Department4</a></li>
+                    <br>  -->
+            </ul>
+                  <button class="open-button" onclick="openForm()">Operator Status</button>
+                    <div class="chat-popup" id="myForm">
+                      <form class="form-container">
+                        <i class="fa fa-times" onclick="closeForm()"></i>
+                        <div class="heading"><center><h3>OPERATOR STATUS</h3></center></div>
+                        <ul style="list-style-type:square;">
+                            <li>Operator 1 <span class="notavailabledot"></span></li>
+                            <li>Operator 2 <span class="notavailabledot"></span></li>
+                            <li>Operator 3 <span class="availabledot"></span></li>
+                            <li>Operator 4 <span class="notavailabledot"></span></li>
+                            <li>Operator 5 <span class="availabledot"></span></li>
+                            <li>Operator 6 <span class="notavailabledot"></span></li>
+                            <li>Operator 7 <span class="availabledot"></span></li>
+                            <li>Operator 8 <span class="notavailabledot"></span></li>
+                            <li>Operator 9 <span class="notavailabledot"></span></li>
+                            <li>Operator 10 <span class="availabledot"></span></li>
+                          </ul>
+                      </form>
+                    </div>
+    </div>
+        <div class="page-wrapper">
+            <div class="container-fluid" style="background-color: aliceblue">
+                <div class="row bg-title" style="background-color: #333;">
+                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                        <h4 class="page-title" style="color:white;float:left;">REAL TIME DASHBOARD</h4>
+                    </div>
+                        <i class="fa fa-user" style="font-size:30px;color:red;float:right;"></i>
+		<div class="dropdown" style="float:right;">
+
+
+<form >
+  <label for="cars">Choose a car:</label>
+  <select id="cars" name="cars" onchange="changeFunc();">
+  </select>
+</form>
+
+
+</div>
+
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-md-4">
+                        <div class="white-box">
+                            <h2 class="box-title">Total Chats Today</h2>
+                            <h3 id="totalChatsToday"></h3>
+                            <h2 class="box-title">Total Chat Duration Today</h2>
+                            <h3 id="totalChatDurationToday"></h3>
+                            <h2 class="box-title">Ongoing Chats</h2>
+                            <h3 id="ongoingChats"></h3>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-8">
+                    <div class="white-box">
+                      <h3 class="box-title">Chat Record</h3>
+
+                      <div id="chart_div" style="overflow-x: scroll">
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-md-4">
+                      <div class="white-box">
+                            <h3 class="box-title">Operator Status</h3>
+
+                            <div id="piechart"></div></div>
+                    </div>
+
+                    <div class="col-xs-12 col-md-8">
+                    <div class="white-box">
+                    <div style="overflow-x:auto;">
+                      <table id="t01" >
+                        <tr style="background-color: black">
+                          <td>Name</td>
+                          <td>Status</td>
+                          <td>Ongoing Chats</td>
+                          <td>Chats Attended</td>
+                          <td>Total Active Time</td>
+                        </tr>
+                      </table>
+                    </div>
+                    </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+  <script src="socket.io/socket.io.js"></script>
+  <script src="js/socket.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+    function openForm() {
+      document.getElementById("myForm").style.display = "block";
+    }
+    function closeForm() {
+    document.getElementById("myForm").style.display = "none";
+    }
+  </script>
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+    function drwaa(x)
+    {
+        google.load("visualization", "1", {packages:["corechart"]});
+        google.setOnLoadCallback(function() { drawChart(x); });
+        google.charts.load('current', {packages: ['corechart', 'line']});
+        google.charts.setOnLoadCallback(drawCurveTypes);
+    }
+  </script>
+  <script type="text/javascript">
+    function drawChart(x) {
+      console.log(x);
+      var data = google.visualization.arrayToDataTable([
+      ['Status', 'No. of Agents'],
+      ['Available', 2],
+      ['Busy', 2],
+      ]);
+      var options = {'width':350, 'height':290 ,'colors':['red','green'], 'pieHole':0.2};
+      var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+    chart.draw(data, options);
+   }
+    function drawCurveTypes() {
+     var data = new google.visualization.DataTable();
+     data.addColumn('timeofday', 'Time of Day');
+     data.addColumn('number', 'Total number of Chats');
+
+     data.addRows([
+        [[8, 30, 45], 5],
+        [[9, 0, 0], 10],
+        [[10, 0, 0, 0], 12],
+        [[10, 45, 0, 0], 13],
+        [[11, 0, 0, 0], 15],
+        [[12, 15, 45, 0], 20],
+        [[13, 0, 0, 0], 22],
+        [[14, 30, 0, 0], 25],
+        [[15, 12, 0, 0], 30],
+        [[16, 45, 0], 32],
+        [[16, 59, 0], 42]
+      ]);
+     var options = {
+        'width':700, 'height':223,
+     };
+     var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+      chart.draw(data, options);
+   }
+  </script>
+
+
+<script>
+// var socket = io();
+ socket.on('message',function(data) {
+	appendData(data);
+      });		
+        function appendData(data) {
+	var table = document.getElementById("t01");
+var i = 1;
+var j=0;
+var row = 1;
+var chatsCompleted = [];
+var name = [];
+var ongoingChats = [];
+var status = [];
+var totalActiveTime = [];
+var deptName = [];
+
+
+for (item in data)
+{
+	deptName[j]=data[item].name;
+	j=j+1;
+}
+var x = document.getElementById("cars").length;
+if(x < deptName.length)
+{
+	for (j=0;j<deptName.length;j++)
+	{
+		var x = document.getElementById("cars");
+		var option = document.createElement("option");
+		option.text = deptName[j];
+		x.add(option, x[0]);
+	}
+}
+console.log("AAAAAAAAAAAAAAAAAAAAA"+ localStorage.getItem("lastSelection"));
+if(localStorage.getItem("lastSelection") !=null)
+{
+document.getElementById("cars").value = localStorage.getItem("lastSelection");
+}
+j=0;
+
+var totalChatsToday = "";
+var totalChatDurationToday = "";
+var ongoingChats = "";
+
+
+for (item in data) 
+{
+	var x = document.getElementById("cars").value;
+	if(data[item].name == x)
+	{
+		totalChatsToday = data[item].completedChats;
+		totalChatDurationToday = "NA";
+		ongoingChats = data[item].ongoingChats;
+		for(subitem in data[item].associatedOperators)
+		{
+			row = row + 1;
+			chatsCompleted[j]=data[item].associatedOperators[subitem].chatsCompleted;
+			name[j]=data[item].associatedOperators[subitem].name;
+			ongoingChats[j]=data[item].associatedOperators[subitem].ongoingChats;
+			status[j]=data[item].associatedOperators[subitem].status;
+			totalActiveTime[j]=data[item].associatedOperators[subitem].totalActiveTime;
+			j=j+1;
+		}
+	}
+}
+
+document.getElementById("totalChatsToday").innerHTML = totalChatsToday;
+document.getElementById("totalChatDurationToday").innerHTML = totalChatDurationToday;
+document.getElementById("ongoingChats").innerHTML = ongoingChats;
+
+var rowCount = document.getElementById('t01').rows.length;
+console.log(rowCount + totalChatsToday);
+console.log(row);
+
+var diff = row-rowCount;
+
+if (diff > 0)
+{
+	addRow(diff);
+}
+else
+{
+	deleteRow(diff);
+}
+renderData(row);
+
+function addRow(diff)
+{
+	for (i=0;i<diff;i++)
+	{
+		console.log("aaaaaaaaa");
+		var row = table.insertRow(1);
+		var cell1 = row.insertCell(0);
+		var cell2 = row.insertCell(1);
+		var cell3 = row.insertCell(2);
+		var cell4 = row.insertCell(3);
+		var cell5 = row.insertCell(4);
+	}
+}
+function deleteRow(diff)
+{
+	for (i=0;i<Math.abs(diff);i++)
+	{
+		document.getElementById("t01").deleteRow(1);
+	}
+}
+function renderData(row)
+{
+	for (var i = 1; i < row; i++)
+	{
+		for (var j = 0; j < 5; j++)
+		{
+			var x = document.getElementById("t01").rows[i].cells;
+			x[0].innerHTML = name[i-1];
+			x[1].innerHTML = status[i-1];
+			x[2].innerHTML = ongoingChats[i-1];
+			x[3].innerHTML = chatsCompleted[i-1];
+			x[4].innerHTML = totalActiveTime[i-1];
+    		}
+	}
+}
+
+
+
+
+
+var x = document.getElementById("cars").value;
+// Store
+//sessionStorage.setItem("lastSelection", x);
+console.log(x+ "11111111111111111111111111111");
+
+
+}
+</script>
+</body>
+</html>

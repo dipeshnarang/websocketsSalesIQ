@@ -1,4 +1,4 @@
-const {updatedData}=require('./models/sendData')
+const {updatedData,sendDeptData}=require('./models/sendData')
 const http=require('http')
 const express=require('express')
 const socketio=require('socket.io')
@@ -17,10 +17,16 @@ app.use(express.json())
 
 io.on('connection',(socket)=>{
 
-    // socket.emit('message',updatedData())
+    socket.emit('deptList',updatedData())
+
+    socket.emit('message',updatedData())
 
     schedule.scheduleJob('*/15 * * * * *',function(){
         socket.emit('message',updatedData())
+    })
+
+    socket.on('selectDepartment',(deptName)=>{
+        socket.emit('departmentData',sendDeptData(deptName))
     })
 })
 

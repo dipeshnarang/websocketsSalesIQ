@@ -211,11 +211,11 @@
             	<strong>REAL TIME DASHBOARD</strong></h3> 
           </div>  
         <div class="dropdown" style="right: 100px;">
-          <button class="dropbtn" id="selected-department">Select Department</button>
-            <div class="dropdown-content" id="dropdown-dept" style="text-align: center;">
-                <a href="#">Department 1</a>
+          <button class="dropbtn">Select Department</button>
+            <div class="dropdown-content" style="text-align: center;">
+                <!-- <a href="#">Department 1</a>
                 <a href="#">Department 2</a>
-                <a href="#">Department 3</a>
+                <a href="#">Department 3</a> -->
             </div>
         </div>   
         <i class="fa fa-user" style="font-size:45px;color:red;float:right;"></i>
@@ -225,7 +225,7 @@
                     <div class="col-6 col-md-4">
                         <div class="white-box" style="background:-webkit-linear-gradient(110deg, lightyellow , #f5e23d )" >
                             <h1 class="box-title"><strong>Total Chats : Today</strong></h1>
-                            <h2 class="counter text-black" id="total-chats"><strong>63</strong></h2>
+                            <h2 class="counter text-black"><strong>63</strong></h2>
                             <i class="fa fa-comment" style="float:right;font-size:26px"></i>
                             <br>
                         </div>
@@ -303,8 +303,6 @@
             </div>
       </div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="socket.io/socket.io.js"></script>
-  <script src="js/socket.js"></script>
   <script>
     function openForm() {
       document.getElementById("myForm").style.display = "block";
@@ -341,15 +339,15 @@
      data.addColumn('number', 'Number of Chats');
  
      data.addRows([
-        [[8, 30, 12], 5],
-        [[9, 0, 15], 10],
-        [[10, 0, 0], 12],
-        [[10, 45, 0], 13],
-        [[11, 0, 0], 15],
-        [[12, 15, 0], 20],
-        [[13, 0, 0], 22],
-        [[14, 30, 0], 25],
-        [[15, 12, 0], 30],
+        [[8, 30, 45], 5],
+        [[9, 0, 0], 10],
+        [[10, 0, 0, 0], 12],
+        [[10, 45, 0, 0], 13],
+        [[11, 0, 0, 0], 15],
+        [[12, 15, 45, 0], 20],
+        [[13, 0, 0, 0], 22],
+        [[14, 30, 0, 0], 25],
+        [[15, 12, 0, 0], 30],
         [[16, 45, 0], 32],
         [[16, 59, 0], 42]
       ]);
