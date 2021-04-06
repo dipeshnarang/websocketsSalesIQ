@@ -6,7 +6,8 @@ function fetchGraphData(callback){
     let time=new Date()
     time.setMinutes(time.getMinutes()-30)
     let milis=time.getTime()
-    let sql='SELECT DEPT_ID, COUNT(*) as DEPT_CHATS FROM chat WHERE START_TIME>'+milis+' group by DEPT_ID;'
+    let sql='select department.ID, COUNT(chat.DEPT_ID) as DEPT_CHATS from department left join chat on department.ID=chat.DEPT_ID'+
+            'where chat.START_TIME>'+milis+'or START_TIME is null group by department.ID;'
     console.log(sql)
     db.connectionPool.getConnection().then((conn)=>{
         conn.query(sql).then((data)=>{
