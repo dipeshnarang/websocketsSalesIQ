@@ -358,6 +358,7 @@ var row = 1;
 var chatsCompleted = [];
 var name = [];
 var ongoingChat = [];
+var chatsOwned=[];
 
 var status = [];
 var totalActiveTime = [];
@@ -404,7 +405,7 @@ for (item in data)
 	{
     console.log("item"+item);
 		totalChatsToday = data[item].completedChats;
-		totalChatDurationToday = "NA";
+		totalChatDurationToday = data[item].chatDuration;
 		ongoingChats = data[item].ongoingChats;
 		for(subitem in data[item].associatedOperators)
 		{
@@ -412,6 +413,7 @@ for (item in data)
 			chatsCompleted[j]=data[item].associatedOperators[subitem].chatsCompleted;
 			name[j]=data[item].associatedOperators[subitem].name;
 			ongoingChat[j]=data[item].associatedOperators[subitem].ongoingChats;
+      chatsOwned[j]=data[item].associatedOperators[subitem].chatsOwned
 			totalActiveTime[j]=data[item].associatedOperators[subitem].totalActiveTime;
 			j=j+1;
 			if(data[item].associatedOperators[subitem].status === 3)
@@ -488,7 +490,7 @@ function renderData(row)
 			x[2].innerHTML = ongoingChat[i-1];
 			x[3].innerHTML = chatsCompleted[i-1];
 			x[4].innerHTML = totalActiveTime[i-1];
-      x[5].innerHTML = chatsCompleted[i-1];
+      x[5].innerHTML = chatsOwned[i-1];
     		}
 	}
 }
