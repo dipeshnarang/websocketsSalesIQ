@@ -1,5 +1,6 @@
 const {getAllOperators}=require('./operator')
 const {getDepartments}=require('./department')
+require('./graph')
 
 function updatedData(){
     let operators=getAllOperators()

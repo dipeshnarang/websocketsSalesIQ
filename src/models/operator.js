@@ -26,6 +26,7 @@ let operators=[]
 function getOperatorDetails(callback){
     db.connectionPool.getConnection().then((conn)=>{
         let sql="SELECT operator.ID, operator.OPT_ID,operator.OPT_NAME, operator.OPT_DEPT_ID ,department.DEPT_NAME, operator.OPT_EMAIL, operator.STATUS, operator.LAST_LOGIN, operator.LAST_OFFLINE from operator inner join department on operator.OPT_DEPT_ID=department.ID;"
+        console.log(sql)
         conn.query(sql).then((result)=>{
             // console.log(result)
             conn.release()
@@ -42,6 +43,7 @@ function getOperatorDetails(callback){
 
 function getChatOperatorDetails(callback){
     let sql="Select chat_opt_details.OPTID, chat_opt_details.ATTENDED_TIME, chat_opt_details.END_TIME, chat_opt_details.CHATS_OWNED from chat_opt_details;"
+    console.log(sql)
     db.connectionPool.getConnection().then((conn)=>{
         conn.query(sql).then((result)=>{
             conn.release()

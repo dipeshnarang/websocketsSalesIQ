@@ -6,7 +6,7 @@ function fetchGraphData(callback){
     let time=new Date()
     time.setMinutes(time.getMinutes()-30)
     let milis=time.getTime()
-    let sql='SELECT DEPT_ID, COUNT(*) as DEPT_CHATS FROM chat WHERE START_TIME>'+milis+"group by DEPT_ID;"
+    let sql='SELECT DEPT_ID, COUNT(*) as DEPT_CHATS FROM chat WHERE START_TIME>0 group by DEPT_ID;'
     console.log(sql)
     db.connectionPool.getConnection().then((conn)=>{
         conn.query(sql).then((data)=>{
@@ -25,11 +25,10 @@ function graphData(chatData){
     let departments=getDepartments()
     
     chatData.forEach((group)=>{
-
         let dep=departments.find((dep)=>{
-            return dep.id==group.ID
+            return dep.id==group.DEPT_ID
         })
-
+        console.log(dep)
         let halfHourData=[[]]
         let time=new Date()
         let hour=time.getHours()
@@ -49,13 +48,20 @@ function graphData(chatData){
     
 }
 
-schedule.scheduleJob('*/30 * * * *',function(){
+schedule.scheduleJob('*/1 * * * *',function(){
     fetchGraphData(function(err,data){
         if(err){
             return console.log(err)
         }
         graphData(data)
     })
+})
+
+fetchGraphData(function(err,data){
+    if(err){
+        return console.log(err)
+    }
+    graphData(data)
 })
 
 

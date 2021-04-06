@@ -76,6 +76,10 @@ function fetchDepartmentsData(){
                 
                 if(!department){
                     departments.push(new Department(row.ID,"deaprtment"+i,row.DEPT_NAME,row.DEPT_ID))
+                }else{
+                    department.completedChats=0
+                    department.ongoingChats=0
+                    department.deptChats=[]
                 }
                 i++
             })
