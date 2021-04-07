@@ -107,11 +107,9 @@ function fetchData(){
 
 
             data.forEach((row)=>{
-                console.log(row)
                 const op=operators.find((operator)=>{
                     return operator.id===row.OPTID
                 })
-                console.log(typeof(row.END_TIME))
                 if(op!=null){
                     
                     if(row.END_TIME!=null){
@@ -134,7 +132,6 @@ function fetchData(){
         
             operators.forEach((op)=>{
                 let timeframes=merge(op.chatsAttended)
-                console.log(timeframes)
                 op.totalActiveTime=convertToReadableTime(calculateActiveTime(timeframes))      
             })
         
