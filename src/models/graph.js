@@ -11,11 +11,15 @@ class GraphObject{
 
 let deptGraphData=[]
 
-function queryDb(sql,callback){
+function queryDb(sql,endTime,callback){
     db.connectionPool.getConnection().then((conn)=>{
         conn.query(sql).then((data)=>{
             conn.release()
-            callback(null,data)
+            let result={
+                data:data,
+                endTime:endTime
+            }
+            callback(null,result)
         }).catch((err)=>{
             conn.release()
             callback(err,null)
@@ -118,32 +122,41 @@ function generateGraphDataOnStartup(){
     const endTime=new Date()
     startTime.setMinutes(startTime.getMinutes()-720)
     endTime.setMinutes(endTime.getMinutes()-690)
+    const endTimes=[]
 
     for(i=1;i<25;i++){
         let begin=startTime.getTime()
+        console.log("BEGIN: "+startTime.toLocaleString())
         let end=endTime.getTime()
+        console.log("END:   "+endTime.toLocaleString())
+
         let sql='select department.ID, COUNT(chat.DEPT_ID) as DEPT_CHATS from department left join' +
             ' (select * from chat where start_time >'+begin+' and start_time <'+end + ' ) chat on department.ID=chat.DEPT_ID  group by department.ID;'
         
-        queryDb(sql,function(err,data){
-            if(err){
-               return console.log(err)
+        queryDb(sql,endTime.getTime().toString(),function(err, result) {
+            if (err) {
+                return console.log(err)
             }
             console.log("Graph Data on Startup--------------------------------------------")
-            console.log(data)
+            console.log(result)
 
-            data.forEach((row)=>{
-                let dep=departments.find((department)=>{
-                    return department.id==row.ID
+
+            let time = new Date(parseInt(result.endTime))
+            console.log(time)
+            // time.setMinutes(time.getMinutes()+330)
+            let hour = time.getHours()
+            console.log("HOUR:" + hour)
+            let minutes = time.getMinutes()
+            console.log("MINTUE:" + minutes)
+            result.data.forEach((row) => {
+                let dep = departments.find((department) => {
+                    return department.id == row.ID
                 })
-                let halfHourData=[[]]
-                let time=endTime
-                time.setMinutes(time.getMinutes()+330)
-                let hour=time.getHours()
-                let minutes=time.getMinutes()
-                halfHourData[0].push(hour,minutes,0)
+                let halfHourData = [[]]
+
+                halfHourData[0].push(hour, minutes, 0)
                 halfHourData.push(row.DEPT_CHATS)
-                if(dep){
+                if (dep) {
                     dep.barGraph.push(halfHourData)
                 }
             })
@@ -157,7 +170,9 @@ function generateGraphDataOnStartup(){
     }
 }
 
-setTimeout(generateGraphDataOnStartup(),2000)
+setTimeout(function(){
+    generateGraphDataOnStartup()
+},2000)
 
 
 
