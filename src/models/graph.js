@@ -132,6 +132,22 @@ function generateGraphDataOnStartup(){
             console.log("Graph Data on Startup--------------------------------------------")
             console.log(data)
 
+            data.forEach((row)=>{
+                let dep=departments.find((department)=>{
+                    return department.id==row.ID
+                })
+                let halfHourData=[[]]
+                let time=endTime
+                time.setMinutes(time.getMinutes()+330)
+                let hour=time.getHours()
+                let minutes=time.getMinutes()
+                halfHourData[0].push(hour,minutes,0)
+                halfHourData.push(row.DEPT_CHATS)
+                if(dep){
+                    dep.barGraph.push(halfHourData)
+                }
+            })
+
         })
         startTime.setMinutes(startTime.getMinutes()+30)
         endTime.setMinutes(endTime.getMinutes()+30)
@@ -141,7 +157,7 @@ function generateGraphDataOnStartup(){
     }
 }
 
-generateGraphDataOnStartup()
+setTimeout(generateGraphDataOnStartup(),2000)
 
 
 
