@@ -98,7 +98,7 @@ function lineGraphData(deptData){
     // console.log(deptGraphData)
 }
 
-schedule.scheduleJob('*/1 * * * *',function(){
+schedule.scheduleJob('*/30 * * * *',function(){
     fetchGraphData(function(err,data){
         if(err){
             return console.log(err)
@@ -108,23 +108,23 @@ schedule.scheduleJob('*/1 * * * *',function(){
     })
 })
 
-fetchGraphData(function(err,data){
-    if(err){
-        return console.log(err)
-    }
-    graphData(data)
-})
+// fetchGraphData(function(err,data){
+//     if(err){
+//         return console.log(err)
+//     }
+//     graphData(data)
+// })
 
 
 function generateGraphDataOnStartup(){
     let departments=getDepartments()
     const startTime=new Date()
     const endTime=new Date()
-    startTime.setMinutes(startTime.getMinutes()-720)
-    endTime.setMinutes(endTime.getMinutes()-690)
+    startTime.setMinutes(startTime.getMinutes()-1440)
+    endTime.setMinutes(endTime.getMinutes()-1410)
     const endTimes=[]
 
-    for(i=1;i<25;i++){
+    for(i=1;i<49;i++){
         let begin=startTime.getTime()
         console.log("BEGIN: "+startTime.toLocaleString())
         let end=endTime.getTime()
